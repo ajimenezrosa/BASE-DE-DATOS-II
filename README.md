@@ -18,6 +18,7 @@
 
 #
 ### 1.2.	    Nivelación de Microsoft T-SQL 
+  [T-sql de base de datos I](https://github.com/ajimenezrosa/Base-de-Datos-I#queessqlsql)
 
 ### 1.3.	    Repaso y nivelación de DML, DDL
 

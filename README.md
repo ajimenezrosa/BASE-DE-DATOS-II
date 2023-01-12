@@ -18,12 +18,36 @@
 
 #
 ### 1.2.	    Nivelación de Microsoft T-SQL 
+#### Revisa los aspectos más relevantes de lo que es T-sql en nuestros documentos de base de datos I
   [T-sql de base de datos I](https://github.com/ajimenezrosa/Base-de-Datos-I#queessqlsql)
+#
 
 ### 1.3.	    Repaso y nivelación de DML, DDL
+#### En esta documentación podrás ver los aspectos más relevantes de lo que es el Lenguaje de Manipulación de Datos, desde el servidor sql.
 
+#### Esta es la pagina oficial de microsft explorala y estudia los diferentes aspectos de este tema.
+[Data manipulation language (Microsoft Access SQL)](https://learn.microsoft.com/en-us/office/client-developer/access/desktop-database-reference/data-manipulation-language)
+#
 ### 1.4.	    Repaso y Nivelación Procedimientos Almacenados
+
+[Creación de un procedimiento almacenado](https://github.com/ajimenezrosa/Base-de-Datos-I#procedure)
+
+
+## Pagina Oficial de Microsoft
+[Create a stored procedure](https://learn.microsoft.com/en-us/sql/relational-databases/stored-procedures/create-a-stored-procedure?view=sql-server-ver16)
+#
+[Modify a Stored Procedure](https://learn.microsoft.com/en-us/sql/relational-databases/stored-procedures/modify-a-stored-procedure?view=sql-server-ver16)
+#
+[Delete a stored procedure](https://learn.microsoft.com/en-us/sql/relational-databases/stored-procedures/delete-a-stored-procedure?view=sql-server-ver16)
+#
+[Execute a stored procedure](https://learn.microsoft.com/en-us/sql/relational-databases/stored-procedures/execute-a-stored-procedure?view=sql-server-ver16)
+
+
 ### 1.5.	   Clausulas SQL
+#### Comandos SQL para manipulación de registros
+[Manipulación de registros](https://github.com/ajimenezrosa/Base-de-Datos-I#manipulacion)
+
+
 ### 1.6.	   Practica # 1
 
 

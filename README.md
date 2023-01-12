@@ -1,3 +1,8 @@
+| Alejandro Jimenez | UCSD |
+|---------------------|------------------------|
+|![](https://avatars.githubusercontent.com/u/7384546?v=4)|![](https://pbs.twimg.com/profile_images/901546652091252736/6Clcdv1L_400x400.jpg)|
+
+
 # BASE-DE-DATOS-II 
 
 

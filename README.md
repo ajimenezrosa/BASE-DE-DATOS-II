@@ -4,8 +4,23 @@
 # UNIDAD I.- Repaso y nivelación Base de Datos I
 
 ### 1.1.	    Repaso de SQL (Structure Query Languaje)
+### Bienvenido al curso de Base de datos II con servidor sql.
+
+#### Espero que en él puedas encontrar contenido que sea útil para tu vida como profesional de la informática.
+
+#### Antes de empezar el curso, sería bueno que hicieras un repaso a los temas tratados en nuestro curso de Base de datos 1, tal vez tomaste la materia con otro profesor o con la persona que te inscribiste.
+
+#### Hay temas que son fundamentales para poder dominar los contenidos que trataremos.
+
+#### Dejo en el enlace un Link que te llevará a los contenidos de la clase anterior.
+
+
+
+#
 ### 1.2.	    Nivelación de Microsoft T-SQL 
+
 ### 1.3.	    Repaso y nivelación de DML, DDL
+
 ### 1.4.	    Repaso y Nivelación Procedimientos Almacenados
 ### 1.5.	   Clausulas SQL
 ### 1.6.	   Practica # 1

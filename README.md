@@ -56,7 +56,27 @@
 
 
 ### 1.6.	   Practica # 1
+
+
+## UNIDAD II.-  Operadores y Funciones
+
+#### [2.1   Estructuras de Control](#21)
+#### [2.2   Operadores aritméticos y Comparaciones](#22)
+#### [2.3   Operadores Lógicos.](#23)
+#### [2.4   Funciones de conversión.](#24)
+#### [2.5   Transacciones.](#25)
+#### [2.6   Funciones Definidas por el Usuario.](#26)
+#### [2.7   Practica #2](#27) 
+#
+
+
+
+
+
+
+
 ![](https://previews.123rf.com/images/stockbakery/stockbakery1710/stockbakery171001986/87835336-sql-hombre-que-trabaja-en-la-interfaz-hologr%C3%A1fica-pantalla-visual.jpg)
+
 
 ## Haz la siguiente práctica.
 #### Cree cada una de las tablas que se muestran a continuación,
@@ -252,7 +272,7 @@ GO
 
 
 ## UNIDAD II.-  Operadores y Funciones
-### 2.1   Estructuras de Control
+### 2.1   Estructuras de Control<a name="21"></a>
 ## **Estructuras de control Sql server**
 
 ## BEGIN...END
@@ -655,19 +675,19 @@ BEGIN
 END
 ~~~
 
-### 2.2   Operadores aritméticos y Comparaciones
+### 2.2   Operadores aritméticos y Comparaciones<a name="22"></a>
 	- practicar en 2 (dos) Hojas máximo, ubicar y explicar los operadores aritméticos
 
 	- Haga un ejemplo con cada una de las estructuras de control del servidor Sql entregar en un archivo .sql
 
 #
 
-### 2.3   Operadores Lógicos.
+### 2.3   Operadores Lógicos.<a name="23"></a>
 
-### 2.4   Funciones de conversión.
-### 2.5   Transacciones.
-### 2.6   Funciones Definidas por el Usuario.
-### 2.7   Practica #2 
+### 2.4   Funciones de conversión.<a name="24"></a>
+### 2.5   Transacciones.<a name="25"></a>
+### 2.6   Funciones Definidas por el Usuario.<a name="26"></a>
+### 2.7   Practica #2<a name="27"></a> 
 
 #
 

@@ -1069,7 +1069,7 @@ AS Result;
 
 
 
-### 2.5   Transacciones.<a name="25"></a>
+## 2.5   Transacciones.<a name="25"></a>
 ## Transacciones
 #### Se aplica a: SQL Server (todas las versiones admitidas)  Azure SQL Database  Azure SQL Managed Instance  Azure Synapse Analytics  Analytics Platform System (PDW)
 #
@@ -1099,8 +1099,45 @@ Realizar investigacion y colocar ejemplos de las siguientes transacciones
 
 
 
-### 2.6   Funciones Definidas por el Usuario.<a name="26"></a>
-### 2.7   Practica #2<a name="27"></a> 
+## 2.6   Funciones Definidas por el Usuario.<a name="26"></a>
+
+#### Al igual que las funciones en lenguajes de programación, SQL Server funciones definidas por el usuario son rutinas que aceptan parámetros, realizan una acción, como un cálculo complejo, y devuelven el resultado de esa acción como valor. El valor devuelto puede ser un valor escalar único o un conjunto de resultados.
+
+## Ventajas de las funciones definidas por el usuario
+
+## ¿Por qué usar funciones definidas por el usuario (UDF)?
+
+#### Programación modular. Puede crear la función una vez, almacenarla en la base de datos y llamarla desde el programa tantas veces como desee. Las funciones definidas por el usuario se pueden modificar, independientemente del código de origen del programa.
+
+#### Ejecución más rápida. De forma similar a los procedimientos almacenados, las funciones definidas por el usuario de Transact-SQL reducen el costo de compilación del código de Transact-SQL almacenando en caché los planes y reutilizándolos para ejecuciones repetidas. Esto significa que la función definida por el usuario no necesita volver a analizarse y volver a personalizarse con cada uso, lo que da lugar a tiempos de ejecución mucho más rápidos.
+
+#### Las funciones CLR ofrecen una ventaja de rendimiento significativa sobre las funciones de Transact-SQL para las tareas computacionales, la manipulación de cadenas y la lógica de negocios. Las funciones de Transact-SQL son más adecuadas para la lógica intensiva de acceso a datos.
+
+#### Reduzca el tráfico de red. Una operación que filtra los datos en función de alguna restricción compleja que no se puede expresar en una sola expresión escalar se puede expresar como una función. La función se puede invocar luego en la cláusula WHERE para reducir el número de filas que se envían al cliente.
+
+## Tipos de funciones
+## Funciones escalares
+#### Las funciones escalares definidas por el usuario devuelven un único valor de datos del tipo definido en la cláusula RETURNS. En una función escalar insertada, el valor escalar es el resultado de una sola instrucción. Para una función escalar de varios estados, el cuerpo de la función puede contener una serie de instrucciones Transact-SQL que devuelven el valor único. El tipo devuelto puede ser de cualquier tipo de datos excepto text, ntext, image, cursory timestamp. Para obtener ejemplos, consulte Creación de funciones definidas por el usuario (motor de base de datos).
+
+## Funciones con valores de tabla
+#### Las funciones con valores de tabla (TVF) definidas por el usuario devuelven un tipo de datos de tabla . Las funciones insertada con valores de tabla no tienen cuerpo; la tabla es el conjunto de resultados de una sola instrucción SELECT. Para obtener ejemplos, consulte Creación de funciones definidas por el usuario (motor de base de datos).
+
+## Funciones del sistema
+#### SQL Server proporciona muchas funciones del sistema que puede usar para realizar varias operaciones. No se pueden modificar. Para obtener más información, vea Funciones integradas (Transact-SQL),Funciones almacenadas del sistema (Transact-SQL) y Funciones y vistas y funciones de administración dinámica (Transact-SQL).
+
+
+#
+## 2.7   Practica #2<a name="27"></a> 
+
+## Cree una consulta para cada uno de los conceptos tratados en este capítulo
+#### 2.1 Estructuras de Control
+#### 2.2 Operadores aritméticos y comparaciones
+#### 2.3 Operadores Lógicos.
+#### 2.4 Funciones de conversión.
+#### 2.5 Transacciones.
+#### 2.6 Funciones definidas por el usuario.
+
+
 
 #
 

@@ -2,7 +2,7 @@
 
 | Alejandro Jimenez | UCSD |
 |---------------------|------------------------|
-|![](https://avatars.githubusercontent.com/u/7384546?v=4)|![](https://pbs.twimg.com/profile_images/901546652091252736/6Clcdv1L_400x400.jpg)|
+|![](https://avatars.githubusercontent.com/u/7384546?v=4)|![](https://web1.ucsd.edu.do/wp-content/uploads/2022/03/cropped-Logo-UCSD-Redes-fondo-blanco-01.png)|
 
 
 # BASE-DE-DATOS-II 
@@ -683,6 +683,230 @@ END
 #
 
 ### 2.3   Operadores Lógicos.<a name="23"></a>
+
+#### Los operadores lógicos comprueban la veracidad de alguna condición. Al igual que los operadores de comparación, devuelven el tipo de datos Boolean con el valor TRUE, FALSE o UNKNOWN.
+
+|Operator |	Significado |
+|-----------------------|-----------------------------|
+|ALL   | 	TRUE si el conjunto completo de comparaciones es TRUE.|
+|AND|	TRUE si ambas expresiones booleanas son TRUE.|
+|ANY|	TRUE si cualquier miembro del conjunto de comparaciones es TRUE.|
+|BETWEEN|	TRUE si el operando está dentro de un intervalo.|
+|EXISTS|	TRUE si una subconsulta contiene cualquiera de las filas.|
+|IN |	TRUE si el operando es igual a uno de la lista de expresiones.|
+|LIKE|	TRUE si el operando coincide con un patrón.|
+|NOT|	Invierte el valor de cualquier otro operador booleano.|
+|OR|	TRUE si cualquiera de las dos expresiones booleanas es TRUE.|
+|SOME |	TRUE si alguna de las comparaciones de un conjunto es TRUE.|
+Consulte también
+
+## ALL
+#### Es una subconsulta que devuelve un conjunto de resultados de una columna. El tipo de datos de la columna devuelta debe ser igual que el tipo de datos de scalar_expression.
+
+#### Es una instrucción SELECT restringida en la que no se permiten la cláusula ORDER BY ni la palabra clave INTO.
+
+## Ejemplos
+#### En el ejemplo siguiente se crea un procedimiento almacenado que determina si todos los componentes de un objeto SalesOrderID especificado en la base de datos AdventureWorks2019 se pueden fabricar en el número de días especificado. En el ejemplo se usa una subconsulta para crear una lista del número del valor de DaysToManufacture para todos los componentes del SalesOrderID específico y, a continuación, confirma que todos los DaysToManufacture están dentro del número de días especificado.
+
+~~~sql
+-- Uses AdventureWorks
+
+CREATE PROCEDURE DaysToBuild @OrderID INT, @NumberOfDays INT  
+AS  
+IF   
+@NumberOfDays >= ALL  
+   (  
+    SELECT DaysToManufacture  
+    FROM Sales.SalesOrderDetail  
+    JOIN Production.Product   
+    ON Sales.SalesOrderDetail.ProductID = Production.Product.ProductID   
+    WHERE SalesOrderID = @OrderID  
+   )  
+PRINT 'All items for this order can be manufactured in specified number of days or less.'  
+ELSE   
+PRINT 'Some items for this order can''t be manufactured in specified number of days or less.' ;
+~~~
+
+
+#### Para probar el procedimiento, ejecútelo con SalesOrderID 49080, que tiene un componente que requiere 2 días y dos componentes que requieren 0 días. La primera instrucción que se indica a continuación cumple los criterios. La segunda consulta no.
+
+~~~sql
+EXECUTE DaysToBuild 49080, 2 ;
+~~~
+
+#### El conjunto de resultados es el siguiente:
+
+    All items for this order can be manufactured in specified number of days or less.
+
+~~~sql
+EXECUTE DaysToBuild 49080, 1 ;  
+~~~
+#### El conjunto de resultados es el siguiente:
+
+    Some items for this order can't be manufactured in specified number of days or less.
+# 
+
+## AND 
+#### Combina dos expresiones booleanas y devuelve TRUE cuando ambas expresiones son TRUE. Cuando se usa más de un operador lógico en una instrucción, en primer lugar se evalúan los operadores AND. Puede cambiar el orden de evaluación gracias a los paréntesis.
+
+
+## Ejemplos
+#### A. Utilizar el operador AND
+#### En el ejemplo siguiente se selecciona información sobre los empleados que tienen el cargo de Marketing Assistant y más de 41 horas de vacaciones disponibles.
+
+~~~sql
+-- Uses AdventureWorks  
+  
+SELECT  BusinessEntityID, LoginID, JobTitle, VacationHours   
+FROM HumanResources.Employee  
+WHERE JobTitle = 'Marketing Assistant'  
+AND VacationHours > 41 ;
+~~~
+
+#### B. Utilizar el operador AND en una instrucción IF
+#### En los ejemplos siguientes se muestra cómo utilizar AND en una instrucción IF. En la primera instrucción, 1 = 1 y 2 = 2 son true; por consiguiente, el resultado es true. En el segundo ejemplo, el argumento 2 = 17 es false; por consiguiente, el resultado es false.
+~~~sql
+IF 1 = 1 AND 2 = 2  
+BEGIN  
+   PRINT 'First Example is TRUE'  
+END  
+ELSE PRINT 'First Example is FALSE' ;  
+GO  
+  
+IF 1 = 1 AND 2 = 17  
+BEGIN  
+   PRINT 'Second Example is TRUE'  
+END  
+ELSE PRINT 'Second Example is FALSE' ;  
+GO
+~~~
+
+## ANY 
+#### Compara un valor escalar con un conjunto de valores de una sola columna.
+
+#### Ejemplos
+#### A. Ejecutar un ejemplo sencillo
+    Las instrucciones siguientes crean una tabla simple y agregan los valores 1, 2, 3 y 4 a la columna de ID.
+~~~sql
+CREATE TABLE T1  
+(ID INT) ;  
+GO  
+INSERT T1 VALUES (1) ;  
+INSERT T1 VALUES (2) ;  
+INSERT T1 VALUES (3) ;  
+INSERT T1 VALUES (4) ;
+~~~
+    La consulta siguiente devuelve TRUE porque 3 es menor que alguno de los valores de la tabla.
+
+~~~sql
+IF 3 < SOME (SELECT ID FROM T1)  
+PRINT 'TRUE'   
+ELSE  
+PRINT 'FALSE' ;
+~~~
+
+    La consulta siguiente devuelve FALSE porque 3 no es menor que todos los valores de la tabla.
+
+~~~sql
+IF 3 < ALL (SELECT ID FROM T1)  
+PRINT 'TRUE'   
+ELSE  
+PRINT 'FALSE' ;
+~~~
+#
+
+
+## BETWEEN 
+
+#### BETWEEN devuelve TRUE si el valor de test_expression es mayor o igual que el valor de begin_expression y menor o igual que el valor de end_expression.
+
+#### NOT BETWEEN devuelve TRUE si el valor de test_expression es menor que el valor de begin_expression y mayor que el valor de end_expression.
+
+## Ejemplos
+#### A. Utilizar BETWEEN
+#### En el ejemplo siguiente se devuelve información sobre los roles de base de datos de una de base de datos. La primera consulta devuelve todos los roles. En el segundo ejemplo se usa la cláusula BETWEEN para limitar los roles a los valores database_id especificados.
+~~~sql
+SELECT principal_id, name 
+FROM sys.database_principals
+WHERE type = 'R';
+
+SELECT principal_id, name 
+FROM sys.database_principals
+WHERE type = 'R'
+AND principal_id BETWEEN 16385 AND 16390;
+GO  
+~~~
+#
+#### B. Utilizar > y < en lugar de BETWEEN
+#### En el siguiente ejemplo se utilizan los operadores mayor que (>) y menor que (<) y, puesto que dichos operadores no son inclusivos, se devuelven nueve filas en lugar de las diez devueltas en el ejemplo anterior.
+
+~~~sql
+-- Uses AdventureWorks  
+  
+SELECT e.FirstName, e.LastName, ep.Rate  
+FROM HumanResources.vEmployee e   
+JOIN HumanResources.EmployeePayHistory ep   
+    ON e.BusinessEntityID = ep.BusinessEntityID  
+WHERE ep.Rate > 27 AND ep.Rate < 30  
+ORDER BY ep.Rate;  
+GO  
+~~~
+#
+
+## EXISTS 
+#### Especifica una subconsulta para probar la existencia de filas.
+ 
+
+##  Ejemplos
+#### A. Utilizar NULL en una subconsulta para seguir devolviendo un conjunto de resultados
+#### En el ejemplo siguiente se devuelve un conjunto de resultados con NULL especificado en la subconsulta, que se sigue evaluando como TRUE al utilizar EXISTS.
+~~~sql
+-- Uses AdventureWorks  
+  
+SELECT DepartmentID, Name   
+FROM HumanResources.Department   
+WHERE EXISTS (SELECT NULL)  
+ORDER BY Name ASC ;  
+~~~
+# 
+#### B. Comparar consultas mediante EXISTS e IN
+#### En el ejemplo siguiente se comparan dos consultas que son semánticamente equivalentes. En la primera consulta se utiliza EXISTS y en la segunda IN.
+~~~sql
+-- Uses AdventureWorks  
+  
+SELECT a.FirstName, a.LastName  
+FROM Person.Person AS a  
+WHERE EXISTS  
+(SELECT *   
+    FROM HumanResources.Employee AS b  
+    WHERE a.BusinessEntityID = b.BusinessEntityID  
+    AND a.LastName = 'Johnson') ;  
+GO  
+~~~
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#
 
 ### 2.4   Funciones de conversión.<a name="24"></a>
 ### 2.5   Transacciones.<a name="25"></a>

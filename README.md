@@ -885,23 +885,88 @@ GO
 ~~~
 #
 
+## IN 
+#### Si el valor de test_expression es igual a cualquier valor devuelto por subquery o si es igual a cualquier expression de la lista separada por comas, el valor devuelto es TRUE; en caso contrario, el valor del resultado es FALSE.
+
+#### El uso de NOT IN niega el valor de subquery o de expression.
 
 
+## Ejemplos
+#### A. Comparar OR e IN
+#### En el ejemplo siguiente se selecciona una lista con los nombres de los empleados que son ingenieros de diseño, ingenieros de herramientas o asistentes de marketing.
 
+~~~sql
+-- Uses AdventureWorks  
+  
+SELECT p.FirstName, p.LastName, e.JobTitle  
+FROM Person.Person AS p  
+JOIN HumanResources.Employee AS e  
+    ON p.BusinessEntityID = e.BusinessEntityID  
+WHERE e.JobTitle = 'Design Engineer'   
+   OR e.JobTitle = 'Tool Designer'   
+   OR e.JobTitle = 'Marketing Assistant';  
+GO  
+~~~
+    No obstante, con IN se recuperan los mismos resultados.
+~~~sql
+-- Uses AdventureWorks  
+  
+SELECT p.FirstName, p.LastName, e.JobTitle  
+FROM Person.Person AS p  
+JOIN HumanResources.Employee AS e  
+    ON p.BusinessEntityID = e.BusinessEntityID  
+WHERE e.JobTitle IN ('Design Engineer', 'Tool Designer', 'Marketing Assistant');  
+GO  
+~~~
+#
 
+## LIKE 
+#### Determina si una cadena de caracteres específica coincide con un patrón especificado. Un patrón puede contener caracteres normales y caracteres comodín. Durante la operación de búsqueda de coincidencias de patrón, los caracteres normales deben coincidir exactamente con los caracteres especificados en la cadena de caracteres. Sin embargo, los caracteres comodín pueden coincidir con fragmentos arbitrarios de la cadena. El uso de caracteres comodín hace que el operador LIKE sea más flexible que los operadores de comparación de cadenas = y !=. Si alguno de los argumentos no es del tipo de datos de cadena de caracteres, Motor de base de datos de SQL Server lo convierte al tipo de datos de cadena de caracteres, si es posible.
 
+### Argumentos
+# 
+|Carácter comodín	|Descripción	| Ejemplo |
+|----------------|----------------|-------------------|
+|%|	|Cualquier cadena de cero o más caracteres.|	WHERE title LIKE '%computer%' busca todos los títulos de libros que contengan la palabra 'computer' en el título.|
+|_ |(carácter de subrayado)	Cualquier carácter individual.|	WHERE au_fname LIKE ‘_ean’ busca todos los nombres de cuatro letras que terminen en ean (Dean, Sean, etc.)|
+|[ ] |	Cualquier carácter individual del intervalo ([a-f]) o del conjunto ([abcdef]) que se ha especificado.|	WHERE au_lname LIKE ‘[C-P]arsen’ busca apellidos de autores que terminen en arsen y empiecen por cualquier carácter individual entre C y P, como Carsen, Larsen, Karsen, etc. En las búsquedas de intervalos, los caracteres incluidos en el intervalo pueden variar, dependiendo de las reglas de ordenación de la intercalación.|
+|[^]|	Cualquier carácter individual que no se encuentre en el intervalo ([^a-f]) o el conjunto ([^abcdef]) que se ha especificado.|	WHERE au_lname LIKE ‘de[^l]%’ busca todos los apellidos de autores que empiecen por de y en los que la siguiente letra no sea l.|
+#
 
+## Observaciones
+#### Cuando se realizan comparaciones de cadenas con LIKE, todos los caracteres de la cadena patrón son significativos, Los caracteres significativos incluyen los espacios iniciales o finales. Si una comparación de una consulta debe devolver todas las filas con una cadena LIKE 'abc ' (abc seguido de un espacio), no se devolverán las filas en las que el valor de esa columna sea abc (sin espacio al final). Sin embargo, no se tienen en cuenta los espacios en blanco finales de la expresión con la que se compara el patrón. Si la comparación de una consulta debe devolver todas las filas con la cadena LIKE 'abc' (abc sin espacio), se devolverán todas las filas que empiecen por abc y tengan cero o más espacios al final.
 
+#### Una comparación de cadenas con un patrón que contenga datos de tipo char y varchar puede no pasar una comparación LIKE debido a la forma en que se han almacenado los datos para cada tipo de datos. En el siguiente ejemplo se pasa una variable local char a un procedimiento almacenado y luego se usa la coincidencia de patrones para encontrar todos los empleados cuyos apellidos empiecen por un juego de caracteres especificado.
 
+~~~sql
+-- Uses AdventureWorks  
+  
+CREATE PROCEDURE FindEmployee @EmpLName CHAR(20)  
+AS  
+SELECT @EmpLName = RTRIM(@EmpLName) + '%';  
+SELECT p.FirstName, p.LastName, a.City  
+FROM Person.Person p JOIN Person.Address a ON p.BusinessEntityID = a.AddressID  
+WHERE p.LastName LIKE @EmpLName;  
+GO  
+EXEC FindEmployee @EmpLName = 'Barb';  
+GO
+~~~
+#### En el procedimiento FindEmployee, no se devuelven filas porque la variable char (@EmpLName) contiene espacios al final cuando el nombre tiene menos de 20 caracteres. Debido a que la columna LastName es de tipo varchar, no hay espacios al final. Este procedimiento no funciona porque los espacios al final son significativos.
 
+#### Pero el siguiente ejemplo funciona porque no se agregan espacios al final a una variable varchar.
 
-
-
-
-
-
-
-
+~~~sql
+-- Uses AdventureWorks  
+  
+CREATE PROCEDURE FindEmployee @EmpLName VARCHAR(20)  
+AS  
+SELECT @EmpLName = RTRIM(@EmpLName) + '%';  
+SELECT p.FirstName, p.LastName, a.City  
+FROM Person.Person p JOIN Person.Address a ON p.BusinessEntityID = a.AddressID  
+WHERE p.LastName LIKE @EmpLName;  
+GO  
+EXEC FindEmployee @EmpLName = 'Barb';
+~~~
 
 
 
@@ -909,7 +974,131 @@ GO
 #
 
 ### 2.4   Funciones de conversión.<a name="24"></a>
+|Veremos en este capitulo|
+|-------------------------|
+|CAST y CONVERT (Transact-SQL)|
+|PARSE (Transact-SQL)|
+|TRY_CAST (Transact-SQL)|
+|TRY_CONVERT (Transact-SQL)|
+|TRY_PARSE (Transact-SQL)|
+
+## CAST y CONVERT
+#### Estas funciones convierten una expresión de un tipo de datos a otro.
+
+
+## PARSE 
+#### Devuelve el resultado de una expresión, traducido al tipo de datos solicitado en SQL Server.
+#### ejemplos
+~~~sql
+SELECT PARSE('Monday, 13 December 2010' AS datetime2 USING 'en-US') AS Result;
+~~~
+#
+
+## TRY_CAST
+#### Devuelve una conversión de valor al tipo de datos especificado si la conversión se realiza correctamente; de lo contrario, devuelve NULL.
+
+### Observaciones
+#### TRY_CAST toma el valor que se le ha pasado e intenta convertirlo al data_type especificado. Si la conversión se realiza correctamente, TRY_CAST devuelve el valor como el data_type especificado; si se produce un error, se devuelve NULL. Pero si se solicita una conversión que no se permite explícitamente, TRY_CAST generará un error.
+
+#### TRY_CAST no es una palabra clave reservada y está disponible en todos los niveles de compatibilidad. TRY_CAST tiene la misma semántica que TRY_CONVERT al conectarse a los servidores remotos.
+
+## Ejemplos
+#### A. TRY_CAST devuelve NULL
+#### En el ejemplo siguiente se muestra que TRY_CAST devuelve NULL cuando se produce un error en la conversión.
+
+~~~sql
+SELECT   
+    CASE WHEN TRY_CAST('test' AS float) IS NULL   
+    THEN 'Cast failed'  
+    ELSE 'Cast succeeded'  
+END AS Result;  
+GO  
+~~~ 
+
+## TRY_CONVERT
+#### Devuelve una conversión de valor al tipo de datos especificado si la conversión se realiza correctamente; de lo contrario, devuelve NULL.
+
+## Observaciones
+#### TRY_CONVERT toma el valor que se le ha pasado e intenta convertirlo al data_type especificado. Si la conversión se realiza correctamente, TRY_CONVERT devuelve el valor como el data_type especificado; si se produce un error, se devuelve NULL. Pero si se solicita una conversión que no se permite explícitamente, TRY_CONVERT generará un error.
+
+#### TRY_CONVERT es una palabra clave reservada en el nivel de compatibilidad 110 y posteriores.
+
+#### Esta función se puede enviar de forma remota a servidores que tengan una versión de SQL Server 2012 (11.x) y superior. No se puede enviar de forma remota a servidores que tengan una versión inferior a SQL Server 2012 (11.x).
+
+
+## Ejemplos
+#### A. TRY_CONVERT devuelve NULL
+#### En el ejemplo siguiente se muestra que TRY_CONVERT devuelve NULL cuando se produce un error en la conversión.
+~~~sql
+SELECT   
+    CASE WHEN TRY_CONVERT(float, 'test') IS NULL   
+    THEN 'Cast failed'  
+    ELSE 'Cast succeeded'  
+END AS Result;  
+GO
+~~~
+
+## TRY_PARSE 
+#### Devuelve el resultado de una expresión, traducido al tipo de datos solicitado, o NULL si se produce un error en la conversión en SQL Server. Use TRY_PARSE solo para convertir de tipos de cadena a tipos de fecha y hora y de número.
+
+
+## Ejemplos
+#### A. Ejemplo simple de TRY_PARSE
+~~~sql
+SELECT TRY_PARSE('Jabberwokkie' AS datetime2 USING 'en-US') AS Result;  
+~~~ 
+
+#
+
+#### B. Detectar valores NULL con TRY_PARSE
+~~~sql
+SELECT  
+    CASE WHEN TRY_PARSE('Aragorn' AS decimal USING 'sr-Latn-CS') IS NULL  
+        THEN 'True'  
+        ELSE 'False'  
+END  
+AS Result; 
+~~~
+
+
+
+
+
+
+
+
+
+
 ### 2.5   Transacciones.<a name="25"></a>
+## Transacciones
+#### Se aplica a: SQL Server (todas las versiones admitidas)  Azure SQL Database  Azure SQL Managed Instance  Azure Synapse Analytics  Analytics Platform System (PDW)
+#
+#### Una transacción es una unidad única de trabajo. Si una transacción tiene éxito, todas las modificaciones de los datos realizadas durante la transacción se confirman y se convierten en una parte permanente de la base de datos. Si una transacción encuentra errores y debe cancelarse o revertirse, se borran todas las modificaciones de los datos.
+#
+## SQL Server funciona en los modos de transacción siguientes:
+
+## Transacciones de confirmación automática
+#### Cada instrucción individual es una transacción.
+
+## Transacciones explícitas
+#### Cada transacción se inicia explícitamente con la instrucción BEGIN TRANSACTION y se termina explícitamente con una instrucción COMMIT o ROLLBACK.
+
+## Transacciones implícitas
+#### Se inicia implícitamente una nueva transacción cuando se ha completado la anterior, pero cada transacción se completa explícitamente con una instrucción COMMIT o ROLLBACK.
+
+## Transacciones de ámbito de lote
+#### Una transacción implícita o explícita de Transact-SQL que se inicia en una sesión de MARS (conjuntos de resultados activos múltiples), que solo es aplicable a MARS, se convierte en una transacción de ámbito de lote. Si no se confirma o revierte una transacción de ámbito de lote cuando se completa el lote, SQL Server la revierte automáticamente.
+#
+## Practica
+Realizar investigacion y colocar ejemplos de las siguientes transacciones
+
+    BEGIN TRANSACTION
+    ROLLBACK TRANSACTION
+    COMMIT TRANSACTION
+#
+
+
+
 ### 2.6   Funciones Definidas por el Usuario.<a name="26"></a>
 ### 2.7   Practica #2<a name="27"></a> 
 

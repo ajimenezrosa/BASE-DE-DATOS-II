@@ -1369,7 +1369,9 @@ GO
 ~~~
 - Create a crud using stored procedures for the clinics database tables.
 
+#
 
+# Recuerde siempre que la constancia es la clave del éxito.
 
 #
 

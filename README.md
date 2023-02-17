@@ -1141,7 +1141,8 @@ Realizar investigacion y colocar ejemplos de las siguientes transacciones
 
 #
 
-## UNIDAD III.-  Temporales  Vistas y triggers	3.1   Tablas Temporales
+## UNIDAD III.-  Temporales  Vistas y triggers	
+### 3.1   Tablas Temporales
 ### 3.2   Vistas
 ### 3.3   Triggers
 ### 3.4   Programando Stored Procedures de SELECT UPDATE y DELETE

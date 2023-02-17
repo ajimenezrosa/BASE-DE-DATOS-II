@@ -70,8 +70,12 @@
 #
 
 
-
-
+## UNIDAD III.- Temporales Vistas y triggers 
+#### [3.1 Tablas Temporales](#31)
+#### [3.2 Vistas](#32)
+#### [3.3 Triggers](#33)
+#### [3.4 Programando Stored Procedures de SELECT UPDATE y DELETE](#34)
+#### [3.5 Práctica#3.1](#35)
 
 
 
@@ -1142,11 +1146,231 @@ Realizar investigacion y colocar ejemplos de las siguientes transacciones
 #
 
 ## UNIDAD III.-  Temporales  Vistas y triggers	
-### 3.1   Tablas Temporales
-### 3.2   Vistas
-### 3.3   Triggers
-### 3.4   Programando Stored Procedures de SELECT UPDATE y DELETE
-### 3.5   Práctica#3.1
+## 3.1   Tablas Temporales <a name="31"></a>
+#### Las tablas temporales (también conocidas como tablas temporales con versión del sistema) son una característica de base de datos que ofrece soporte integrado para proporcionar información sobre los datos almacenados en la tabla en cualquier momento en el tiempo, en vez de únicamente los datos que son correctos en el momento actual determinado.
+
+## ¿Por qué temporal?
+#### Los orígenes de datos reales son dinámicos y, con más frecuencia que las decisiones no empresariales, se basan en la información que los analistas obtienen de la evolución de los datos. Estos son los casos de uso de tablas temporales:
+#
+- Realizar una auditoría de todos los cambios de datos y realizar análisis forenses de datos cuando sea necesario
+- Reconstruir el estado de los datos a partir de cualquier momento en el pasado
+- Calcular las tendencias en el tiempo
+- Mantener una dimensión de variación lenta para aplicaciones de apoyo de decisiones
+- Recuperarse de cambios accidentales de datos y errores de aplicación
+#
+
+## Variables de tabla
+#### Las variables de tabla se crean como cualquier otra variable, utilizando la instrucción DECLARE. Muchos creen que las variables de tabla existen solo en la memoria, pero eso simplemente no es cierto. Ya que residen en la base de datos tempdb de forma muy similar a las tablas temporales de SQL Server locales. También como las tablas temporales de SQL locales, las variables de tabla solo son accesibles dentro de la sesión que las creó. No obstante, a diferencia de las tablas temporales de SQL, solo se puede tratar de acceder a la variable de tabla dentro del lote actual. No son visibles fuera del lote, lo que significa que el concepto de jerarquía de sesión puede ignorarse de alguna manera.
+
+#### En lo que respecta al rendimiento, las variables de tabla son útiles con pequeñas cantidades de datos (como solo unas pocas filas). De lo contrario, una tabla temporal de SQL Server es útil al examinar grandes cantidades de datos. Ahora, para la mayoría de los scripts, lo más probable es que vea el uso de una tabla temporal de SQL Server en lugar de una variable de tabla. Esto no quiere decir que uno sea más útil que el otro, solo tiene que elegir la herramienta adecuada para el trabajo.
+
+~~~sql
+DECLARE @TotalProduct AS TABLE 
+(ProductID INT NOT NULL PRIMARY KEY,
+ Quantity INT NOT NULL)
+ 
+ INSERT INTO @TotalProduct
+         ( [ProductID], [Quantity] )
+ SELECT
+  A.[ProductID],
+  [Quantity] = SUM(B.Quantity)
+FROM dbo.Product AS A
+INNER JOIN dbo.SalesDetails AS B ON A.ProducitID = B.ProductIDb
+~~~
+
+
+
+
+
+## 3.2   Vistas<a name="32"></a>
+#### Una vista es una tabla virtual cuyo contenido está definido por una consulta. Al igual que una tabla, una vista consta de un conjunto de columnas y filas de datos con un nombre. Sin embargo, a menos que esté indizada, una vista no existe como conjunto de valores de datos almacenados en una base de datos. Las filas y las columnas de datos proceden de tablas a las que se hace referencia en la consulta que define la vista y se producen de forma dinámica cuando se hace referencia a la vista.
+#
+
+
+## Tipos de vistas
+#### Además del rol estándar de las vistas básicas definidas por el usuario, SQL Server proporciona los siguientes tipos de vistas que permiten llevar a cabo objetivos especiales en una base de datos.
+
+### **Vistas indizadas**
+#### Una vista indizada es una vista que se ha materializado. Esto significa que se ha calculado la definición de la vista y que los datos resultantes se han almacenado como una tabla. Se puede indizar una vista creando un índice clúster único en ella. Las vistas indizadas pueden mejorar de forma considerable el rendimiento de algunos tipos de consultas. Las vistas indizadas funcionan mejor para consultas que agregan muchas filas. No son adecuadas para conjuntos de datos subyacentes que se actualizan frecuentemente.
+
+### **Vistas con particiones**
+#### Una vista con particiones combina datos horizontales con particiones de un conjunto de tablas miembro en uno o más servidores. Esto hace que los datos aparezcan como si fueran de una tabla. Una vista que combina tablas miembro en la misma instancia de SQL Server es una vista con particiones local.
+
+### **Vistas del sistema**
+#### Las vistas de sistema exponen metadatos de catálogo. Puede usar las vistas del sistema para devolver información acerca de la instancia de SQL Server u objetos definidos en la instancia. Por ejemplo, puede consultar la vista de catálogo sys.databases para devolver información sobre las bases de datos definidas por el usuario disponibles en la instancia. Para obtener más información, vea Vistas del sistema (Transact-SQL)
+
+# 
+
+## 3.3   Triggers<a name="33"></a>
+
+### **¿Qué es un Trigger?**
+#### Un trigger o disparador es un script que se usa en lenguaje de programación SQL, en especial en bases de datos como MySQL o PostgreSQL.
+#
+#### Consiste en una serie de reglas predefinidas que se asocian a una tabla. Estas reglas se aplican a la base de datos cuando se realizan determinadas operaciones en la tabla, por ejemplo, al añadir, actualizar o eliminar registros.
+#
+#### Dicho de otra manera, el trigger desencadena determinadas acciones de forma automática en las tablas de la base de datos cuando se insertan, modifican y se añaden nuevos datos.
+#
+#### Estos disparadores se llevan usando en MySQL desde la versión 5.0.2., mientras que PostgreSQL ya los incluyó en el año 1997.
+
+### **¿Para qué sirve?**
+### La principal función de los trigger es contribuir a mejorar la gestión de la base de datos. Gracias a ellos muchas operaciones se pueden realizar de forma automática, sin necesidad de intervención humana, lo que permite ahorrar mucho tiempo.
+#
+#### Otra de sus funciones es aumentar la seguridad e integridad de la información. Esto lo consiguen gracias a la programación de restricciones o requerimientos de verificación que permiten minimizar los errores y sincronizar la información.
+
+
+~~~sql
+
+Create Trigger Nombre_Trigger 
+ON [Table | View] 
+ FOR | AFTER | INSTEAD OF
+ [INSERT] [,] [UPDATE] [,] [DELETE]
+AS
+ Sentencia SQL
+~~~ 
+
+
+    Ejemplos:
+
+    Ejemplo 1:
+##### Implementar un Trigger que permita mostrar un mensaje cada vez que se inserte o actualice un registro en la tabla pasajero.
+
+    Tabla Pasajero
+~~~sql
+--Implementamos nuestro trigger
+
+CREATE TRIGGER trmensaje_pasajero
+
+ON pasajero --Tabla donde se ejecuta el desencadenador
+
+--El desencadenador se activará cuando
+
+--las operaciones Insert y Update son correctas
+
+FOR INSERT, UPDATE
+
+AS
+
+     --Instrucciones del desencadenador
+
+     PRINT 'Pasajero actualizado correctamente'
+
+go
+~~~
+
+
+
+
+#
+### 3.4   Programando Stored Procedures de SELECT UPDATE y DELETE<a name="34"></a>
+#
+### **¿Qué son los procedimientos almacenados?**
+#### Los procedimientos almacenados son scripts de código SQL que pueden o no recibir parámetros, y que devuelven un resultado. Este un ejemplo para SQL Server, pero se podría aplicar a las bases de datos en general haciendo pequeñas modificaciones para cada tipo de base de datos.
+#
+
+### INSERT
+#### Con el comando INSERT, crearemos un registro en una tabla. Veamos el ejemplo, de la creación del procedimiento anterior:
+
+~~~sql
+CREATE PROCEDURE sp_insert_empleado
+@nombre VARCHAR(50), 
+@apellido VARCHAR(50)
+AS 
+INSERT INTO empleados ([Nombre],[Apellido])
+VALUES (@nombre, @apellido) 
+GO
+~~~
+#### Después de insertar un empleado, querremos ver sus datos. Veamos cómo.
+
+#
+
+### SELECT
+#### Con este comando, obtendremos la información de una tabla. Si queremos, podemos filtrar por los datos de un empleado. Esto se hace por medio del comando WHERE. Este comando puede contener varias opciones. Veamos un ejemplo sencillo:
+~~~sql
+CREATE PROCEDURE sp_select_empleado
+@id INT
+AS 
+SELECT * FROM empleados WHERE id = @id
+GO
+~~~
+#### En este caso la ejecución podría ser ‘sp_select_empleado(1)’
+
+#
+
+### UPDATE
+#### Con este comando, actualizaremos los datos del empleado:
+~~~sql
+CREATE PROCEDURE sp_update_empleado  
+@id INT
+@nombre VARCHAR(50),  
+@apellido VARCHAR(50)
+AS 
+UPDATE empleados SET  
+       [Nombre] = @nombre,
+       [Apellido] = @apellido
+       WHERE id= @id
+GO
+~~~
+
+#
+
+### DELETE
+#### Finalmente, crearemos un nuevo procedimiento almacenado para eliminar un empleado.
+~~~sql
+CREATE PROCEDURE sp_delete_empleado
+@id INT
+AS 
+DELETE FROM empleados WHERE id = @id
+GO
+~~~
+#
+
+#### Los procedimientos almacenados nos permiten reutilizar bastante código. Esto son solo ejemplos sencillos para operaciones CRUD, pero, pueden servirnos también, para realizar operaciones más complejas
+#
+
+### 3.5   Práctica#3.1<a name="35"></a>
+Utilizando las tablas de nuestro sistema de clinica debemos hacer lo siguiente
+
+- crear una tabla temporal usando declare @data para almacenar los registros de un **HistoriaPaciente**
+
+- Utilizando el código que se muestra como ejemplo, cree una vista de la tabla de pacientes.
+
+~~~sql
+create view [dbo].[Invoices] AS
+SELECT Orders.ShipName, Orders.ShipAddress, Orders.ShipCity, Orders.ShipRegion, Orders.ShipPostalCode, 
+	Orders.ShipCountry, Orders.CustomerID, Customers.CompanyName AS CustomerName, Customers.Address, Customers.City, 
+	Customers.Region, Customers.PostalCode, Customers.Country, 
+	(FirstName + ' ' + LastName) AS Salesperson, 
+	Orders.OrderID, Orders.OrderDate, Orders.RequiredDate, Orders.ShippedDate, Shippers.CompanyName As ShipperName, 
+	"Order Details".ProductID, Products.ProductName, "Order Details".UnitPrice, "Order Details".Quantity, 
+	"Order Details".Discount, 
+	(CONVERT(money,("Order Details".UnitPrice*Quantity*(1-Discount)/100))*100) AS ExtendedPrice, Orders.Freight
+FROM 	Shippers INNER JOIN 
+		(Products INNER JOIN 
+			(
+				(Employees INNER JOIN 
+					(Customers INNER JOIN Orders ON Customers.CustomerID = Orders.CustomerID) 
+				ON Employees.EmployeeID = Orders.EmployeeID) 
+			INNER JOIN "Order Details" ON Orders.OrderID = "Order Details".OrderID) 
+		ON Products.ProductID = "Order Details".ProductID) 
+	ON Shippers.ShipperID = Orders.ShipVia
+GO
+~~~
+
+- Cree un disparador para la tabla de historial del paciente usando el siguiente código como referencia
+~~~sql
+   Create TRIGGER [dbo].[tr_AfterUpdate_envioREgistrosMiembros] ON [dbo].[miembros]
+    FOR UPDATE
+	as
+	begin
+
+    exec sp_updateMembertrigger()
+
+    end
+~~~
+- Create a crud using stored procedures for the clinics database tables.
+
+
+
 #
 
 
